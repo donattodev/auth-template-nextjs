@@ -52,7 +52,7 @@ Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
 ```env
 # Banco de dados (SQLite)
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="file:./dev.db" // em desenvolvimento
 
 # Auth.js
 AUTH_SECRET=""
