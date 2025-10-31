@@ -17,8 +17,8 @@ export function GoogleButton({ title }: GoogleButtonProps) {
     >
       <Button
         type="submit"
-        variant={'destructive'}
-        className="w-full cursor-pointer"
+        variant={'outline'}
+        className="w-full cursor-pointer font-medium duration-150 normal-case transition-colors"
       >
         <GoogleLogo />
         <span>{title}</span>

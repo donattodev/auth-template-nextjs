@@ -15,7 +15,8 @@ const REDIRECT_WHEN_AUTHENTICATED_ROUTE = '/sign-in'
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
   const publicRoute = publicRoutes.find(route => route.path === path)
-  const authToken = request.cookies.get('__Secure-authjs.session-token')
+  // const authToken = request.cookies.get('__Secure-authjs.session-token') **Em produção utilize essa linha**
+  const authToken = request.cookies.get('authjs.session-token')
 
   if (!authToken && publicRoute) {
     return NextResponse.next()

@@ -1,3 +1,4 @@
+import { SectionBall } from '@/elements/section/section-ball'
 import type { ReactNode } from 'react'
 
 export default function PublicLayout({
@@ -5,5 +6,10 @@ export default function PublicLayout({
 }: Readonly<{
   children: ReactNode
 }>) {
-  return <main className="max-sm:px-6 ">{children}</main>
+  return (
+    <main className="flex w-full min-h-dvh max-sm:grid max-sm:grid-cols-1">
+      {children}
+      <SectionBall />
+    </main>
+  )
 }

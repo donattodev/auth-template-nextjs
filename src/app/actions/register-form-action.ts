@@ -2,17 +2,16 @@
 
 import db from '@/lib/prisma'
 import { hashSync } from 'bcrypt-ts'
-import { redirect } from 'next/navigation'
 
-type SignInFormState = {
+type RegisterFormState = {
   success: boolean
   message?: string
 }
 
 export default async function registerFormAction(
-  _prevState: SignInFormState | null,
+  _prevState: RegisterFormState | null,
   formdata: FormData
-) {
+): Promise<RegisterFormState> {
   const entries = Array.from(formdata.entries())
   const data = Object.fromEntries(entries) as {
     name: string
@@ -23,18 +22,16 @@ export default async function registerFormAction(
 
   if (!data.name || !data.email || !data.password) {
     return {
-      message: 'Todos os dados precisam ser preenchidos!',
+      message: 'Todos os campos precisam ser preenchidos!',
       success: false,
     }
   }
 
-  const user = await db.user.findUnique({
-    where: {
-      email: data.email,
-    },
+  const userExists = await db.user.findUnique({
+    where: { email: data.email },
   })
 
-  if (user) {
+  if (userExists) {
     return {
       message: 'Este usuário já existe!',
       success: false,
@@ -50,5 +47,8 @@ export default async function registerFormAction(
     },
   })
 
-  return redirect('/sign-in')
+  return {
+    success: true,
+    message: 'Usuário cadastrado com sucesso!',
+  }
 }

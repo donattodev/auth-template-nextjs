@@ -7,13 +7,15 @@ Template moderno e funcional para autenticação com **Next.js**, oferecendo sup
 ## 🖼️ Demonstrações
 
 ### Tela de Login  
-![Image](https://github.com/user-attachments/assets/90ebd510-e7bd-4f20-bbfd-a13b2bddb235)
+<img width="1599" height="762" alt="Image" src="https://github.com/user-attachments/assets/aaf821b1-b2de-4718-b541-43428341481b" />
 
 ### Tela de Cadastro  
-![Image](https://github.com/user-attachments/assets/05516473-5d92-439a-8447-54d0ec89a93c)
+<img width="1596" height="762" alt="image" src="https://github.com/user-attachments/assets/de7bb22f-4bf9-4ac6-8094-ef74582bffe4" />
+
 
 ### Dashboard
-![Image](https://github.com/user-attachments/assets/e81c20d5-45b7-4a9a-82f7-e8ab40c7dd43)
+<img width="1598" height="761" alt="image" src="https://github.com/user-attachments/assets/41db5772-3705-45c1-ada9-65f4181ef161" />
+
 
 
 ---
@@ -67,6 +69,13 @@ AUTH_GOOGLE_SECRET=""
 - 📩 Verificação de e-mail após cadastro
 - 🧑‍🤝‍🧑 Suporte a mais provedores sociais (GitHub, X)
 - 🖼️ Upload de avatar do usuário
+- 🕓 Animações de entrada e transição de paginas
+
+## 🎨 Melhorias e funcionalidades no designer
+
+- 🔄 Melhoria no Navbar
+- 📩 Criação de uma dashboard
+- 🧑‍🤝‍🧑 Pagina de Profile
 
 ## 👨‍💻 Autor
 
@@ -74,7 +83,7 @@ AUTH_GOOGLE_SECRET=""
 Desenvolvedor Web especializado em soluções personalizadas para WordPress.
 
 - 🌐 [donattodev.com.br](https://donattodev.com.br) 
-- 📧 comercial@donattodev.com.br
+- 📧 donattodev@gmail.com
 - 🐙 [github.com/donattodev](https://github.com/donattodev)
 
 ---

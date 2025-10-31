@@ -1,60 +1,116 @@
 'use client'
 
 import signInFormAction from '@/app/actions/sign-in-form-action'
-import { Logo } from '@/components/icons/logo-donatto'
 import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import Form from 'next/form'
-import Link from 'next/link'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useActionState, useEffect } from 'react'
+import { useTransition } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod/v4'
+
+const signInSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'O e-mail é obrigatório')
+    .email('Digite um e-mail válido'),
+  password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
+})
+
+type SignInSchema = z.infer<typeof signInSchema>
 
 export function SignInForm() {
-  const [state, formAction, isPending] = useActionState(signInFormAction, null)
-
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
-  useEffect(() => {
-    if (state?.success) {
-      router.push('/')
-    }
-  }, [state?.success, router])
+  const form = useForm<SignInSchema>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+
+  const onSubmit = (values: SignInSchema) => {
+    startTransition(async () => {
+      const formData = new FormData()
+      formData.append('email', values.email)
+      formData.append('password', values.password)
+
+      const res = await signInFormAction(null, formData)
+
+      if (res.success) {
+        toast.success('Login realizado com sucesso!')
+        router.push('/')
+      } else {
+        toast.error(res.message ?? 'Erro ao realizar login')
+      }
+    })
+  }
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4 w-full">
-      {state?.success === false && (
-        <div className="bg-red-200 w-full px-4 text-sm font-bold rounded-sm text-red-800 py-2.5 uppercase">
-          <span>{state?.message}</span>
-        </div>
-      )}
+    <div className="flex flex-col justify-center items-center gap-4">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4  w-full"
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Endereço de e-mail"
+                    autoFocus
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <Logo className='w-56 mb-6'/>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Senha</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="*************"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <Form action={formAction} className="space-y-4 text-center w-full">
-        <Input
-          type="email"
-          name="email"
-          placeholder="Endereço de e-mail"
-          autoFocus
-        />
-        <Input type="password" name="password" placeholder="*************" />
-        <Button type="submit" className="w-full" disabled={isPending}>
-          Realizar Login
-        </Button>
-
-        <span className="text-neutral-500 font-semibold text-sm">
-          Ainda não possui cadastro?{' '}
-          <Link href="/register" className="text-primary font-bold">
-            Cadastre-se aqui!
-          </Link>
-        </span>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isPending}
+            aria-disabled={isPending}
+          >
+            {isPending ? 'Entrando...' : 'Logar'}
+          </Button>
+        </form>
       </Form>
-
-      <div className="flex gap-2 items-center w-full">
-        <span className="h-[1px] bg-neutral-500 w-full" />
-        <span className="text-xs font-medium text-neutral-500">OU</span>
-        <span className="h-[1px] bg-neutral-500 w-full" />
-      </div>
     </div>
   )
 }

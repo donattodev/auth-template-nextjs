@@ -40,7 +40,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: var(--font-inter)
+  --font-sans: var(--font-inter);
 }
 
 :root {
@@ -51,7 +51,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.72 0.174 121.18);
+  --primary: oklch(0.4764 0.1833 291.3);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.35 0.0466 290.6);
   --secondary-foreground: oklch(0.205 0 0);
@@ -85,7 +85,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.94 0.2256 121.48);
+  --primary: oklch(0.4764 0.1833 291.3);
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.35 0.0466 290.6);
   --secondary-foreground: oklch(0.985 0 0);
@@ -121,8 +121,6 @@
   }
 }
 
-
-
 /* width */
 ::-webkit-scrollbar {
   width: 9px;
@@ -137,7 +135,6 @@
 ::-webkit-scrollbar-thumb {
   background: #313131;
   border-radius: 25px;
-
 }
 
 /* Handle on hover */
@@ -149,4 +146,19 @@
   ::-webkit-scrollbar {
     display: none;
   }
+}
+
+@keyframes pulse-wave {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.animate-pulse-wave {
+  animation: pulse-wave 1.8s ease-out infinite;
 }

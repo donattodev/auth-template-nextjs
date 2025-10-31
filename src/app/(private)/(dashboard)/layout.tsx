@@ -5,9 +5,5 @@ export default function DashboardLayout({
 }: Readonly<{
   children: ReactNode
 }>) {
-  return (
-    <main className="w-full min-h-dvh">
-      {children}
-    </main>
-  )
+  return <main className="w-full min-h-dvh">{children}</main>
 }

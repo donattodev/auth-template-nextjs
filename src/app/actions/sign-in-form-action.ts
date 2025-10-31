@@ -19,15 +19,10 @@ export default async function signInFormAction(
     })
 
     if (res?.error) {
-      return {
-        success: false,
-        message: 'Dados de login incorretos!',
-      }
+      return { success: false, message: 'Dados de login incorretos!' }
     }
 
-    return {
-      success: true,
-    }
+    return { success: true }
   } catch (e: unknown) {
     console.error(e)
 
@@ -37,15 +32,9 @@ export default async function signInFormAction(
       'type' in e &&
       (e as { type: string }).type === 'CredentialsSignin'
     ) {
-      return {
-        success: false,
-        message: 'Dados de login incorretos!',
-      }
+      return { success: false, message: 'Dados de login incorretos!' }
     }
 
-    return {
-      success: false,
-      message: 'Ops, algum erro aconteceu.',
-    }
+    return { success: false, message: 'Ops, algum erro aconteceu.' }
   }
 }

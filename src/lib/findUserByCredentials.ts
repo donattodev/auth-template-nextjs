@@ -4,9 +4,8 @@ import db from './prisma'
 
 export async function findUserByCredentials(
   email: string,
-  password: string,
+  password: string
 ): Promise<userTypes | null> {
-
   const user = await db.user.findFirst({
     where: { email },
   })
@@ -20,7 +19,7 @@ export async function findUserByCredentials(
       email: user.email,
       name: user.name,
       surname: user.surname,
-      image: user.image ?? undefined
+      image: user.image ?? undefined,
     }
   }
 

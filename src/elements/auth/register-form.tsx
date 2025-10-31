@@ -1,58 +1,139 @@
 'use client'
 
 import registerFormAction from '@/app/actions/register-form-action'
-import { Logo } from '@/components/icons/logo-donatto'
 import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import Form from 'next/form'
-import Link from 'next/link'
-import { useActionState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
+
+const registerSchema = z.object({
+  name: z.string().min(1, 'O nome é obrigatório'),
+  surname: z.string().min(1, 'O sobrenome é obrigatório'),
+  email: z.string().email('E-mail inválido'),
+  password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
+})
+
+type RegisterSchema = z.infer<typeof registerSchema>
 
 export function RegisterForm() {
-  const [state, formAction, isPending] = useActionState(
-    registerFormAction,
-    null
-  )
+  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
+
+  const form = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: '',
+      surname: '',
+      email: '',
+      password: '',
+    },
+  })
+
+  const onSubmit = (values: RegisterSchema) => {
+    startTransition(async () => {
+      const formData = new FormData()
+      formData.append('name', values.name)
+      formData.append('surname', values.surname)
+      formData.append('email', values.email)
+      formData.append('password', values.password)
+
+      const res = await registerFormAction(null, formData)
+
+      if (res.success) {
+        toast.success(res.message ?? 'Cadastro realizado com sucesso!')
+        router.push('/sign-in')
+      } else {
+        toast.error(res.message ?? 'Erro ao cadastrar usuário')
+      }
+    })
+  }
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4  w-full">
-      {state?.success === false && (
-        <div className="bg-red-200 w-full px-4 text-sm font-bold rounded-sm text-red-800 py-2.5 uppercase">
-          <span>{state?.message}</span>
-        </div>
-      )}
+    <div className="flex flex-col justify-center items-center gap-4 w-full">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 w-full"
+        >
+          <div className="flex items-center gap-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Primeiro nome</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Primeiro Nome" autoFocus {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-       <Logo className='w-56 mb-6'/>
+            <FormField
+              control={form.control}
+              name="surname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sobrenome</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Sobrenome" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-      <Form action={formAction} className="space-y-4 text-center">
-        <div className="flex items-center gap-4">
-          <Input
-            type="text"
-            name="name"
-            placeholder="Primeiro nome"
-            autoFocus
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Digite um e-mail válido!"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <Input type="text" name="surname" placeholder="Sobrenome" />
-        </div>
-        <Input type="email" name="email" placeholder="Endereço de e-mail" />
-        <Input type="password" name="password" placeholder="*************" />
-        <Button type="submit" className="w-full" disabled={isPending}>
-          Cadastrar
-        </Button>
 
-        <span className="text-neutral-500 font-medium text-sm">
-          Não possui registro?{' '}
-          <Link href="/sign-in" className="text-primary font-semibold">
-            Faça o login aqui!
-          </Link>
-        </span>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Senha</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="**********" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? 'Cadastrando...' : 'Cadastrar'}
+          </Button>
+        </form>
       </Form>
-
-      <div className="flex gap-2 items-center w-full">
-        <span className="h-[1px] bg-neutral-500 w-full" />
-        <span className="text-xs font-medium text-neutral-500">OU</span>
-        <span className="h-[1px] bg-neutral-500 w-full" />
-      </div>
     </div>
   )
 }

@@ -26,8 +26,12 @@ export async function ProfileForm() {
       </div>
 
       <ul className="flex flex-col gap-4 w-full">
-        <li className="dark:bg-neutral-700 bg-neutral-200 px-6 py-2.5 rounded-md">{name}</li>
-        <li className="dark:bg-neutral-700 bg-neutral-200 px-6 py-2.5 rounded-md">{email}</li>
+        <li className="dark:bg-neutral-700 bg-neutral-200 px-6 py-2.5 rounded-md">
+          {name}
+        </li>
+        <li className="dark:bg-neutral-700 bg-neutral-200 px-6 py-2.5 rounded-md">
+          {email}
+        </li>
       </ul>
     </section>
   )
